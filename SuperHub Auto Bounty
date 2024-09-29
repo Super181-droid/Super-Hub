@@ -1,0 +1,103 @@
+lua
+-- Super Hub Auto Bounty Script with Custom Settings
+-- WARNING: Use at your own risk. This can get you banned.
+
+getgenv().Setting = {
+["Team"] = "Pirates",
+["Chat"] = {},
+["Skip Race V4"] = true,
+["Misc"] = {
+["Enable Lock Bounty"] = false,
+["Lock Bounty"] = {0, 300000000},
+["Hide Health"] = {6000, 8000},
+["Lock Camera"] = true,
+["Enable Cam Farm"] = false,
+["White Screen"] = false,
+["FPS Boost"] = false,
+["Bypass TP"] = true,
+["Random & Store Fruit"] = true
+},
+["Item"] = {
+["Melee"] = {
+["Enable"] = true,
+["Z"] = {["Enable"] = true, ["Hold Time"] = 1},
+["X"] = {["Enable"] = true, ["Hold Time"] = 0},
+["C"] = {["Enable"] = true, ["Hold Time"] = 0}
+},
+["Blox Fruit"] = {
+["Enable"] = false,
+["Z"] = {["Enable"] = true, ["Hold Time"] = 1.5},
+["X"] = {["Enable"] = true, ["Hold Time"] = 0},
+["C"] = {["Enable"] = true, ["Hold Time"] = 0},
+["V"] = {["Enable"] = true, ["Hold Time"] = 0},
+["F"] = {["Enable"] = true, ["Hold Time"] = 0}
+},
+["Sword"] = {
+["Enable"] = false,
+["Z"] = {["Enable"] = true, ["Hold Time"] = 0.3},
+["X"] = {["Enable"] = true, ["Hold Time"] = 0.2}
+},
+["Gun"] = {
+["Enable"] = true,
+["Z"] = {["Enable"] = true, ["Hold Time"] = 0.5},
+["X"] = {["Enable"] = true, ["Hold Time"] = 0.3}
+}
+}
+}
+
+print("Super Hub Auto Bounty Script Loaded with Custom Settings")
+
+_G.AutoBounty = true -- Set this to false to stop the script.
+
+function farmBounty()
+while _G.AutoBounty do
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+local myCharacter = localPlayer.Character
+
+for _, player in pairs(players:GetPlayers()) do
+if player ~= localPlayer then
+pcall(function()
+local targetCharacter = player.Character
+if targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") then
+local targetPosition = targetCharacter.HumanoidRootPart.Position
+myCharacter:MoveTo(targetPosition)
+wait(0.5)
+
+-- Attack logic
+local tool = localPlayer.Backpack:FindFirstChildOfClass("Tool")
+if tool then
+localPlayer.Character.Humanoid:EquipTool(tool)lua
+tool:Activate()
+end
+end
+end)
+end
+end
+
+wait(1) -- Adjust wait time based on game performance
+end
+end
+
+-- Function to toggle the auto bounty script
+function toggleAutoBounty(state)
+_G.AutoBounty = state
+if state then
+print("Auto Bounty Enabled")
+spawn(farmBounty)
+else
+print("Auto Bounty Disabled")
+end
+end
+
+-- Initialize the script
+_G.SuperHub = {
+toggleAutoBounty = toggleAutoBounty
+}
+
+-- Auto start if _G.AutoBounty is true
+if _G.AutoBounty then
+spawn(farmBounty)
+end
+
+print("Super Hub Initialized")
